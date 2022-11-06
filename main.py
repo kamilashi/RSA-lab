@@ -1,4 +1,5 @@
 import math
+import sys
 import random
 from egcd import egcd
 
@@ -92,23 +93,33 @@ print("d = " + str(d));  # private key
 # numOfPrimes = math.trunc(x / math.trunc(math.log(x)));
 
 
-m = 17;
+m = 3;
 print("initial m = " + str(m));
 
+
 def squareAndMultiply(x, k, n):
-    print("k = " + str(bin(k)));
+    print("k = " + str(bin(156)));
+    k = reverseBits(k);
+    print("reverse k = " + str(bin(reverseBits(156))));
     res = 1;
-    while (k != 0):
-        k_i = k % 2;
-        k = int((k - k_i) / 2);
-        if (k_i == 0):
-            print("k_i = 0");
+    while (k > 0):
+        # k_i = k % 2;
+        # k = int((k - k_i) / 2);
+        if (k & 1 == 0):
+            # print("k_i = 0");
             res = (res * res) % n;
             res * x  # fake multiplication
         else:
-            print("k_i = 1");
+            # print("k_i = 1");
             res = (res * res * x) % n;
+        k = k >> 1
     return res;
+
+def reverseBits(number):
+    bit_size = sys.getsizeof(number);
+    string = "{:" + str(bit_size) + "b}";
+    reversed = int(string.format(number)[::-1], 2);
+    return reversed
 
 
 # encipher:
