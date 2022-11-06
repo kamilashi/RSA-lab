@@ -59,7 +59,7 @@ def getPrimeOfLength(bits):
         trialOfLength += increment;
         if isPrime(trialOfLength, 4):
             break
-        print(str(trialOfLength) + " is not prime. searching further...");
+        #print(str(trialOfLength) + " is not prime. searching further...");
     return trialOfLength;
 
 
@@ -70,10 +70,16 @@ def getCoPrimeTo(number):
     return (e_candidate);
 
 
-length = 512;
-p = 7;  # getPrimeOfLength(length);
+length = 1024;
+#for debugging:
+#p = 7;
+#q = 11;
+#e = 17;
+
+p = getPrimeOfLength(length);
 print("p = " + str(p));
-q = 11;  # getPrimeOfLength(length);
+
+q = getPrimeOfLength(length);
 while (p == q):
     q = getPrimeOfLength(length);
 print("q = " + str(q));
@@ -81,9 +87,9 @@ print("q = " + str(q));
 n = p * q;  # public key 1
 phi = (p - 1) * (q - 1);
 
-print("phi  = = (p - 1) * (q - 1) = " + str(phi));
+print("n  =  " + str(n));
 
-e = 17;  # getCoPrimeTo(phi);
+e = getCoPrimeTo(phi);
 print("e = " + str(e));  # public key 2
 [gcd, d, u] = egcd(e, phi);
 if (d < 0):
@@ -93,27 +99,22 @@ print("d = " + str(d));  # private key
 # numOfPrimes = math.trunc(x / math.trunc(math.log(x)));
 
 
-m = 3;
+m = 1234567;
 print("initial m = " + str(m));
 
 
 def squareAndMultiply(x, k, n):
-    print("k = " + str(bin(156)));
     k = reverseBits(k);
-    print("reverse k = " + str(bin(reverseBits(156))));
     res = 1;
     while (k > 0):
-        # k_i = k % 2;
-        # k = int((k - k_i) / 2);
         if (k & 1 == 0):
-            # print("k_i = 0");
             res = (res * res) % n;
             res * x  # fake multiplication
         else:
-            # print("k_i = 1");
             res = (res * res * x) % n;
         k = k >> 1
     return res;
+
 
 def reverseBits(number):
     bit_size = sys.getsizeof(number);
@@ -126,5 +127,8 @@ def reverseBits(number):
 c = squareAndMultiply(m, e, n);
 print("c = " + str(c));
 
+# decipher:
 deciphered_m = squareAndMultiply(c, d, n);
 print("m = " + str(deciphered_m));
+
+
