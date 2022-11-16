@@ -13,10 +13,11 @@ n = json_object['n'];
 print("private key n = " + str(n));
 
 path = "./ciphertext/c.txt"
+ciphertext = [];
 with open(path) as f:
-    lines = f.readlines()
-c = int(lines[0]);
-print("read c as = " + str(c));
+    for line in f:
+            ciphertext.append(line);
+print("ciphertext = " + str(ciphertext));
 
 
 def squareAndMultiply(x, k, n):
@@ -35,16 +36,19 @@ def squareAndMultiply(x, k, n):
 def reverseBits(number):
     bit_size = sys.getsizeof(number);
     string = "{:" + str(bit_size) + "b}";
-    reversed = int(string.format(number)[::-1], 2);
-    return reversed
+    reversedInt = int(string.format(number)[::-1], 2);
+    return reversedInt
 
 
-# encipher:
-m = squareAndMultiply(c, d, n);
-print("m = " + str(m));
+plaintext = "";
+# decipher:
+for charInt in ciphertext:
+    c = squareAndMultiply(int(charInt), d, n);
+    plaintext += chr(c);
+    print("desiphered character = " + chr(c));
 
 #write to file:
 
 path = "./plaintext/m.txt"
 with open(path, 'w+') as f:
-    f.write(str(m));
+    f.write(str(plaintext));
