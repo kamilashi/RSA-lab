@@ -116,7 +116,9 @@ with open(path, "w+") as outfile:
 # Data to be written
 privateKeys = {
     "n": n,
-    "d": d
+    "d": d,
+    "p": p,
+    "q": q
 }
 
 # Serializing json
