@@ -47,8 +47,8 @@ def reverseBits(number):
 
 
 def CRT(m, u, v, d_p, d_q, p, q):
-    sig_p = (pow((m % p), d_p)) % p;
-    sig_q = (pow((m % q), d_q)) % q;
+    sig_p = pow((m % p), d_p, p);
+    sig_q = pow((m % q), d_q, q);
     # print("sig_p = " + str(sig_p));
     # print("sig_q = " + str(sig_q));
     sig1 = u * p * sig_q ;
@@ -77,7 +77,7 @@ if (withCRT == False):
         signaturetext += str(sig) + "\n";
         print("enciphered character = " + str(sig));
 else:
-
+    print("CRT on ");
     [gcd, v, u] = egcd(q, p);
     print("v = " + str(v));
     print("u = " + str(u));

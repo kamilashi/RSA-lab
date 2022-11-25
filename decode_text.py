@@ -1,6 +1,8 @@
 import sys
 import json
 
+from egcd import egcd
+
 # Opening JSON file
 path = "./keys/private/priv.json"
 with open(path, 'r') as openfile:
@@ -11,6 +13,9 @@ d = json_object['d'];
 print("private key d = " + str(d));
 n = json_object['n'];
 print("private key n = " + str(n));
+q = json_object['q'];
+p = json_object['p'];
+
 
 path = "./ciphertext/c.txt"
 ciphertext = [];
@@ -38,14 +43,43 @@ def reverseBits(number):
     string = "{:" + str(bit_size) + "b}";
     reversedInt = int(string.format(number)[::-1], 2);
     return reversedInt
+def CRT(m, u, v, d_p, d_q, p, q):
+    sig_p = pow((m % p), d_p, p);
+    sig_q = pow((m % q), d_q, q);
+    # print("sig_p = " + str(sig_p));
+    # print("sig_q = " + str(sig_q));
+    sig1 = u * p * sig_q ;
+    sig2 = v * q * sig_p;
+    # print("sig1 = " + str(sig1));
+    # print("sig2 = " + str(sig2));
+    sig = sig1 + sig2;
+    if (sig < 0):
+        sig = sig % (p * q)
+    return sig;
 
 
 plaintext = "";
 # decipher:
-for charInt in ciphertext:
-    c = squareAndMultiply(int(charInt), d, n);
-    plaintext += chr(c);
-    print("desiphered character = " + chr(c));
+# choosing method:
+withCRT = True;
+if (withCRT == False):
+    for charInt in ciphertext:
+        c = squareAndMultiply(int(charInt), d, n);
+        plaintext += chr(c);
+        print("deciphered character = " + chr(c));
+else:
+    print("CRT on ");
+    [gcd, v, u] = egcd(q, p);
+    print("v = " + str(v));
+    print("u = " + str(u));
+    d_p = d % (p - 1);
+    d_q = d % (q - 1);
+    print("d_p = " + str(d_p));
+    print("d_q = " + str(d_q));
+    for charInt in ciphertext:
+        sig = CRT(int(charInt), u, v, d_p, d_q, p, q);
+        plaintext += chr(sig);
+        print("deciphered character = " + chr(sig));
 
 #write to file:
 
