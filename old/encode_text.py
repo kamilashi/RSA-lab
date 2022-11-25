@@ -1,6 +1,27 @@
 import sys
 import json
 
+# Opening JSON file
+path = "./keys/public/pub.json"
+with open(path, 'r') as openfile:
+    # Reading from json file
+    json_object = json.load(openfile)
+
+e = json_object['e'];
+print("public key e = " + str(e));
+n = json_object['n'];
+print("public key n = " + str(n));
+
+path = "./plaintext/m.txt"
+plaintext = [];
+with open(path) as f:
+    for line in f:
+        for char in line:
+            plaintext.append(char);
+
+print("enciphering:  " + str(plaintext));
+
+
 def squareAndMultiply(x, k, n):
     k = reverseBits(k);
     res = 1;
@@ -20,6 +41,18 @@ def reverseBits(number):
     reversedInt = int(string.format(number)[::-1], 2);
     return reversedInt
 
+
+ciphertext = "";
+# encipher:
+for charInt in plaintext:
+    c = squareAndMultiply(ord(charInt), e, n);
+    ciphertext += str(c) + "\n";
+    print("enciphered character = " + str(c));
+
+# write to file:
+path = "./ciphertext/c.txt"
+with open(path, 'w+') as f:
+    f.write(str(ciphertext));
 
 def main(vectorTest, input):
     # Opening JSON file
@@ -42,7 +75,7 @@ def main(vectorTest, input):
                 for char in line:
                     plaintext.append(char);
     else:
-        plaintext = list(input);
+        plaintext = input;
     print("enciphering:  " + str(plaintext));
 
     ciphertext = "";

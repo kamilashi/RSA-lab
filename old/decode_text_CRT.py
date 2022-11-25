@@ -1,7 +1,7 @@
 import sys
 import json
-from egcd import egcd
 
+from egcd import egcd
 
 # Opening JSON file
 path = "./keys/private/priv.json"
@@ -16,14 +16,13 @@ print("private key n = " + str(n));
 q = json_object['q'];
 p = json_object['p'];
 
-path = "./plaintext/m.txt"
-plaintext = [];
+
+path = "./ciphertext/c.txt"
+ciphertext = [];
 with open(path) as f:
     for line in f:
-        for char in line:
-            plaintext.append(char);
-
-print("signing:  " + str(plaintext));
+            ciphertext.append(line);
+print("ciphertext = " + str(ciphertext));
 
 
 def squareAndMultiply(x, k, n):
@@ -44,8 +43,6 @@ def reverseBits(number):
     string = "{:" + str(bit_size) + "b}";
     reversedInt = int(string.format(number)[::-1], 2);
     return reversedInt
-
-
 def CRT(m, u, v, d_p, d_q, p, q):
     sig_p = pow((m % p), d_p, p);
     sig_q = pow((m % q), d_q, q);
@@ -61,22 +58,16 @@ def CRT(m, u, v, d_p, d_q, p, q):
     return sig;
 
 
-signaturetext = "";
-# encipher:
-# d = 53;
-# p = 7;
-# q = 11;
-# e = 17;
-# n = p * q;  # public key 1s
-
+plaintext = "";
+# decipher:
 # choosing method:
-withCRT = False;
+withCRT = True;
 if (withCRT == False):
     print("CRT off ");
-    for charInt in plaintext:
-        sig = squareAndMultiply(ord(charInt), d, n);
-        signaturetext += str(sig) + "\n";
-        print("enciphered character = " + str(sig));
+    for charInt in ciphertext:
+        c = squareAndMultiply(int(charInt), d, n);
+        plaintext += chr(c);
+        print("deciphered character = " + chr(c));
 else:
     print("CRT on ");
     [gcd, v, u] = egcd(q, p);
@@ -86,12 +77,13 @@ else:
     d_q = d % (q - 1);
     print("d_p = " + str(d_p));
     print("d_q = " + str(d_q));
-    for charInt in plaintext:
-        sig = CRT(ord(charInt), u, v, d_p, d_q, p, q);
-        signaturetext += str(sig) + "\n";
-        print("signed character = " + str(sig));
+    for charInt in ciphertext:
+        sig = CRT(int(charInt), u, v, d_p, d_q, p, q);
+        plaintext += chr(sig);
+        print("deciphered character = " + chr(sig));
 
-# write to file:
-path = "./signaturetext/sig.txt"
+#write to file:
+
+path = "./plaintext/m.txt"
 with open(path, 'w+') as f:
-    f.write(str(signaturetext));
+    f.write(str(plaintext));

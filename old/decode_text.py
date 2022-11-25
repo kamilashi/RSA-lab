@@ -1,6 +1,29 @@
 import sys
 import json
+
 from egcd import egcd
+
+# Opening JSON file
+path = "./keys/private/priv.json"
+with open(path, 'r') as openfile:
+    # Reading from json file
+    json_object = json.load(openfile)
+
+d = json_object['d'];
+print("private key d = " + str(d));
+n = json_object['n'];
+print("private key n = " + str(n));
+q = json_object['q'];
+p = json_object['p'];
+print("DEEEEBUGGGGG");
+
+path = "./ciphertext/c.txt"
+ciphertext = [];
+with open(path) as f:
+    for line in f:
+            ciphertext.append(line);
+print("ciphertext = " + str(ciphertext));
+
 
 def squareAndMultiply(x, k, n):
     k = reverseBits(k);
@@ -34,6 +57,37 @@ def CRT(m, u, v, d_p, d_q, p, q):
         sig = sig % (p * q)
     return sig;
 
+
+plaintext = "";
+# decipher:
+# choosing method:
+withCRT = False;
+if (withCRT == False):
+    print("CRT off ");
+    for charInt in ciphertext:
+        c = squareAndMultiply(int(charInt), d, n);
+        plaintext += chr(c);
+        print("deciphered character = " + chr(c));
+else:
+    print("CRT on ");
+    [gcd, v, u] = egcd(q, p);
+    print("v = " + str(v));
+    print("u = " + str(u));
+    d_p = d % (p - 1);
+    d_q = d % (q - 1);
+    print("d_p = " + str(d_p));
+    print("d_q = " + str(d_q));
+    for charInt in ciphertext:
+        sig = CRT(int(charInt), u, v, d_p, d_q, p, q);
+        plaintext += chr(sig);
+        print("deciphered character = " + chr(sig));
+
+#write to file:
+
+path = "./plaintext/m.txt"
+with open(path, 'w+') as f:
+    f.write(str(plaintext));
+
 def main(vectorTest, input, CRTon):
     # Opening JSON file
     path = "./keys/private/priv.json"
@@ -56,9 +110,9 @@ def main(vectorTest, input, CRTon):
             for line in f:
                 ciphertext.append(line);
     else:
-        ciphertext = input.splitlines()
+        ciphertext = input;
 
-    #print("ciphertext = " + str(ciphertext));
+    # print("ciphertext = " + str(ciphertext));
 
     plaintext = "";
 
@@ -80,9 +134,8 @@ def main(vectorTest, input, CRTon):
         # print("d_q = " + str(d_q));
         for charInt in ciphertext:
             sig = CRT(int(charInt), u, v, d_p, d_q, p, q);
-            print("deciphered character = " + chr(sig));
             plaintext += chr(sig);
-
+            #print("deciphered character = " + chr(sig));
 
     # write to file:
     print("deciphered: " +str(plaintext));
@@ -92,6 +145,5 @@ def main(vectorTest, input, CRTon):
         f.write(str(plaintext));
 
     return plaintext;
-
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2], sys.argv[3]);
+    main(sys.argv[1],sys.argv[2],sys.argv[3])
