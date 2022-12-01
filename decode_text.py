@@ -34,7 +34,7 @@ def CRT(m, u, v, d_p, d_q, p, q):
         sig = sig % (p * q)
     return sig;
 
-def main(vectorTest, input, CRTon):
+def main(vectorTest=False, input=0, CRTon=False):
     # Opening JSON file
     path = "./keys/private/priv.json"
     with open(path, 'r') as openfile:
@@ -58,7 +58,7 @@ def main(vectorTest, input, CRTon):
     else:
         ciphertext = input.splitlines()
 
-    #print("ciphertext = " + str(ciphertext));
+    print("deciphering " + str(ciphertext));
 
     plaintext = "";
 
@@ -80,7 +80,7 @@ def main(vectorTest, input, CRTon):
         # print("d_q = " + str(d_q));
         for charInt in ciphertext:
             sig = CRT(int(charInt), u, v, d_p, d_q, p, q);
-            print("deciphered character = " + chr(sig));
+            #print("deciphered character = " + chr(sig));
             plaintext += chr(sig);
 
 

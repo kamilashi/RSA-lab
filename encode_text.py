@@ -1,6 +1,7 @@
 import sys
 import json
 
+
 def squareAndMultiply(x, k, n):
     k = reverseBits(k);
     res = 1;
@@ -21,7 +22,7 @@ def reverseBits(number):
     return reversedInt
 
 
-def main(vectorTest, input):
+def main(vectorTest=False, input=0):
     # Opening JSON file
     path = "./keys/public/pub.json"
     with open(path, 'r') as openfile:
@@ -29,13 +30,13 @@ def main(vectorTest, input):
         json_object = json.load(openfile)
 
     e = json_object['e'];
-    #print("public key e = " + str(e));
+    # print("public key e = " + str(e));
     n = json_object['n'];
-    #print("public key n = " + str(n));
+    # print("public key n = " + str(n));
 
     plaintext = []
 
-    if(vectorTest==False):
+    if (vectorTest == False):
         path = "./plaintext/m.txt"
         with open(path) as f:
             for line in f:
@@ -50,7 +51,7 @@ def main(vectorTest, input):
     for charInt in plaintext:
         c = squareAndMultiply(ord(charInt), e, n);
         ciphertext += str(c) + "\n";
-        #print("enciphered character = " + str(c));
+        # print("enciphered character = " + str(c));
 
     # write to file:
     path = "./ciphertext/c.txt"
@@ -58,5 +59,7 @@ def main(vectorTest, input):
         f.write(str(ciphertext));
 
     return ciphertext;
+
+
 if __name__ == "__main__":
-    main(sys.argv[1],sys.argv[2])
+    main(sys.argv[1], sys.argv[2])

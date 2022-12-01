@@ -1,28 +1,6 @@
 import sys
 import json
-
-# Opening JSON file
 from egcd import egcd
-
-path = "./keys/public/pub.json"
-with open(path, 'r') as openfile:
-    # Reading from json file
-    json_object = json.load(openfile)
-
-e = json_object['e'];
-print("public key e = " + str(e));
-n = json_object['n'];
-print("public key n = " + str(n));
-
-
-
-path = "./signaturetext/sig.txt"
-signaturetext = [];
-with open(path) as f:
-    for line in f:
-            signaturetext.append(line);
-print("validating = " + str(signaturetext));
-
 
 def squareAndMultiply(x, k, n):
     k = reverseBits(k);
@@ -43,16 +21,48 @@ def reverseBits(number):
     reversedInt = int(string.format(number)[::-1], 2);
     return reversedInt
 
-plaintext = "";
+def main(vectorTest=False, input=0):
+    # Opening JSON file
 
-for charInt in signaturetext:
-    c = squareAndMultiply(int(charInt), e, n);
-    plaintext += chr(c);
-    print("authenticated character = " + chr(c));
+    path = "./keys/public/pub.json"
+    with open(path, 'r') as openfile:
+        # Reading from json file
+        json_object = json.load(openfile)
+
+    e = json_object['e'];
+    #print("public key e = " + str(e));
+    n = json_object['n'];
+    #print("public key n = " + str(n));
+
+    path = "./signaturetext/sig.txt"
+    signaturetext = [];
+
+    if (vectorTest == False):
+        with open(path) as f:
+            for line in f:
+                signaturetext.append(line);
+    else:
+        signaturetext = input.splitlines()
+
+    print("validating = " + str(signaturetext));
 
 
-#write to file:
+    plaintext = "";
 
-path = "./plaintext/m.txt"
-with open(path, 'w+') as f:
-    f.write(str(plaintext));
+    for charInt in signaturetext:
+        c = squareAndMultiply(int(charInt), e, n);
+        plaintext += chr(c);
+        #print("authenticated character = " + chr(c));
+
+    # write to file:
+    print("authenticated: " + str(plaintext));
+
+    path = "./plaintext/m.txt"
+    with open(path, 'w+') as f:
+        f.write(str(plaintext));
+
+    return plaintext;
+
+
+if __name__ == "__main__":
+    main(sys.argv[1], sys.argv[2])
