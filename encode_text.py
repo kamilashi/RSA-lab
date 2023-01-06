@@ -44,7 +44,7 @@ def main(vectorTest=False, input=0):
                     plaintext.append(char);
     else:
         plaintext = list(input);
-    print("enciphering:  " + str(plaintext));
+    # print("enciphering:  " + str(plaintext));
 
     ciphertext = "";
     # encipher:
