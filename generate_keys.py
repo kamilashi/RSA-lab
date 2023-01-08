@@ -98,7 +98,7 @@ print(f"Evaluated time for key q: {qTime:.4f}")
 
 n = p * q  # public key 1
 phi = (p - 1) * (q - 1)
-
+print("phi = " + str(phi))
 print("n  =  " + str(n))
 
 e = getCoPrimeTo(phi)

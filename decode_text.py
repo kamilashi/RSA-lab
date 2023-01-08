@@ -90,7 +90,7 @@ def main(vectorTest=False, input=0, CRTon=False):
     # write to file:
     # print("deciphered: " +str(plaintext));
 
-    path = "./plaintext/m.txt"
+    path = "./plaintext/decoded.txt"
     with open(path, 'w+') as f:
         f.write(str(plaintext))
 
