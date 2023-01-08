@@ -44,7 +44,7 @@ def main(vectorTest=False, input=0):
     else:
         signaturetext = input.splitlines()
 
-    print("validating = " + str(signaturetext));
+    # print("validating = " + str(signaturetext));
 
 
     plaintext = "";
@@ -55,7 +55,7 @@ def main(vectorTest=False, input=0):
         #print("authenticated character = " + chr(c));
 
     # write to file:
-    print("authenticated: " + str(plaintext));
+    # print("authenticated: " + str(plaintext));
 
     path = "./plaintext/m.txt"
     with open(path, 'w+') as f:

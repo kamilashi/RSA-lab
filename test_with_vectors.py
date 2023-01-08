@@ -1,11 +1,18 @@
-
 import decode_text
 import encode_text
 import sign_text
 import authenticate_text
+import generate_keys
+import time
 
-inputs = ["vector 1", "Vector 2", "Vector 3"];
-outputs = [];
+
+def printAverageTime(arr, funName):
+    avrg = sum(arr) / len(arr)
+    print(f"Average time taken for {funName}: {avrg:.4f}")
+
+
+input = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+outputs = ""
 
 
 # @params: encode_text.main(vectorTest, input)
@@ -22,63 +29,136 @@ outputs = [];
 
 
 # testing encoding and decoding (without CRT):
-print("\ntesting encoding and decoding (without CRT):\n");
-for input in inputs:
-    encodedMessage = encode_text.main(True, input);
-    decodedMessage = decode_text.main(True, encodedMessage, True);
-    print("");
-    outputs.append(decodedMessage);
+print(f"key length {generate_keys.length} bit")
+print(f"Text length: {len(input)}")
+print("\ntesting encoding and decoding (without CRT):\n")
+outputs = []
 
-print("Initial test vector: ");
-print(inputs);
 
-print("Deciphered output: ");
-print(outputs);
+decodeTimeWithoutCRT = []
+
+
+[encodedMessage, encodeTimeWithoutCRT] = encode_text.main(True, input)
+
+
+startTimeDecodeWithoutCRT = time.time()
+decodedMessage = decode_text.main(True, encodedMessage, False)
+endTimeDecodeWithoutCRT = time.time()
+elapsedTimeDecodeWithoutCRT = endTimeDecodeWithoutCRT - startTimeDecodeWithoutCRT
+decodeTimeWithoutCRT.append(elapsedTimeDecodeWithoutCRT)
+
+print("")
+outputs.append(decodedMessage)
+
+print("Initial test vector: ")
+print(input)
+
+print("Deciphered output: ")
+print(outputs)
+
+printAverageTime(encodeTimeWithoutCRT, "Encryption without CRT")
+printAverageTime(decodeTimeWithoutCRT, "Decryption without CRT")
+
 
 # testing encoding and decoding (with CRT):
-print("\ntesting encoding and decoding (with CRT):\n");
-for input in inputs:
-    encodedMessage = encode_text.main(True, input);
-    decodedMessage = decode_text.main(True, encodedMessage, False);
-    print("");
-    outputs.append(decodedMessage);
+print("\ntesting encoding and decoding (with CRT):\n")
+outputs = []
 
-print("Initial test vector: ");
-print(inputs);
+# encodeTimeWithCRT = []
+decodeTimeWithCRT = []
 
-print("Deciphered output: ");
-print(outputs);
+
+startTimeEncodeWithCRT = time.time()
+[encodedMessage, encodeTimeWithCRT] = encode_text.main(True, input)
+endTimeEncodeWithCRT = time.time()
+
+elapsedTimeEncodeWithCRT = endTimeEncodeWithCRT - startTimeEncodeWithCRT
+# encodeTimeWithCRT.append(elapsedTimeEncodeWithCRT)
+
+startTimeDecodeWithCRT = time.time()
+decodedMessage = decode_text.main(True, encodedMessage, True)
+endTimeDecodeWithCRT = time.time()
+
+elapsedTimeDecodeWithCRT = endTimeDecodeWithCRT - startTimeDecodeWithCRT
+decodeTimeWithCRT.append(elapsedTimeDecodeWithCRT)
+
+print("")
+outputs.append(decodedMessage)
+
+
+print("Initial test vector: ")
+print(input)
+
+print("Deciphered output: ")
+print(outputs)
+
+printAverageTime(encodeTimeWithCRT, "Encryption with CRT")
+printAverageTime(decodeTimeWithCRT, "Decryption with CRT")
 
 
 # testing signing and validating (without CRT):
-print("\ntesting signing and validating (without CRT):\n");
-outputs = [];
+print("\ntesting signing and validating (without CRT):\n")
+outputs = []
+signTimeWithoutCRT = []
+validateTimeWithoutCRT = []
 
-for input in inputs:
-    signedMessage = sign_text.main(True, input, False);
-    validatedMessage = authenticate_text.main(True, signedMessage);
-    print("");
-    outputs.append(validatedMessage);
 
-print("Initial test vector: ");
-print(inputs);
+startTimeSignWithoutCRT = time.time()
+signedMessage = sign_text.main(True, input, False)
+endTimeSignWithoutCRT = time.time()
 
-print("Validated output: ");
-print(outputs);
+ellapsedTimeSignWithoutCRT = endTimeSignWithoutCRT - startTimeSignWithoutCRT
+signTimeWithoutCRT.append(ellapsedTimeSignWithoutCRT)
+
+startTimeValidateWithoutCRT = time.time()
+validatedMessage = authenticate_text.main(True, signedMessage)
+endTimeValidateWithoutCRT = time.time()
+
+ellapsedTimeValidateWithoutCRT = endTimeValidateWithoutCRT - \
+    startTimeValidateWithoutCRT
+validateTimeWithoutCRT.append(ellapsedTimeValidateWithoutCRT)
+
+print("")
+outputs.append(validatedMessage)
+
+
+print("Initial test vector: ")
+print(input)
+
+print("Validated output: ")
+print(outputs)
+
+printAverageTime(signTimeWithoutCRT, "Signing without CRT")
+printAverageTime(validateTimeWithoutCRT, "Validation without CRT")
 
 
 # testing signing and validating (with CRT):
-print("\ntesting signing and validating (with CRT):\n");
-outputs = [];
+print("\ntesting signing and validating (with CRT):\n")
+outputs = []
+signTimeWithCRT = []
+validateTimeWithCRT = []
 
-for input in inputs:
-    signedMessage = sign_text.main(True, input, True);
-    validatedMessage = authenticate_text.main(True, signedMessage);
-    print("");
-    outputs.append(validatedMessage);
+startTimeSignWithCRT = time.time()
+signedMessage = sign_text.main(True, input, True)
+endTimeSignWithCRT = time.time()
+ellapsedTimeSignWithCRT = endTimeSignWithCRT - startTimeSignWithCRT
+signTimeWithCRT.append(ellapsedTimeSignWithCRT)
 
-print("Initial test vector: ");
-print(inputs);
+startTimeValidateWithCRT = time.time()
+validatedMessage = authenticate_text.main(True, signedMessage)
+endTimeValidateWithCRT = time.time()
 
-print("Validated output: ");
-print(outputs);
+ellapsedTimeValidateWithCRT = endTimeValidateWithCRT - \
+    startTimeValidateWithCRT
+validateTimeWithCRT.append(ellapsedTimeValidateWithCRT)
+print("")
+outputs.append(validatedMessage)
+
+print("Initial test vector: ")
+print(input)
+
+print("Validated output: ")
+print(outputs)
+
+printAverageTime(signTimeWithCRT, "Signing with CRT")
+printAverageTime(validateTimeWithCRT, "Validation with CRT")
