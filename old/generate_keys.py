@@ -70,7 +70,7 @@ def getCoPrimeTo(number):
     return (e_candidate);
 
 
-length = 1024;
+length = 4096;
 #for debugging:
 #p = 7;
 #q = 11;
