@@ -49,31 +49,29 @@ def main(vectorTest=False, input=0):
     # print("enciphering:  " + str(plaintext));
 
     ciphertext = ""
-    c_to_test = ""
     # encipher:
     for charInt in plaintext:
         c = squareAndMultiply(ord(charInt), e, n)
         
         ciphertext += str(c) + "\n"
-        c_to_test += str(c)
 
         # print("enciphered character = " + str(c));
 
-    encodeTimeWithoutCRT = []
-    endTimeEncodeWithoutCRT = time.time()
-    elapsedTimeWithoutCRT = endTimeEncodeWithoutCRT - startTimeEncodeWithoutCRT
-    encodeTimeWithoutCRT.append(elapsedTimeWithoutCRT)
+    #encodeTimeWithoutCRT = []
+    #endTimeEncodeWithoutCRT = time.time()
+    #elapsedTimeWithoutCRT = endTimeEncodeWithoutCRT - startTimeEncodeWithoutCRT
+    #encodeTimeWithoutCRT.append(elapsedTimeWithoutCRT)
     # write to file:
     path = "./ciphertext/c.txt"
-    path_to_test = "./ciphertext/c_to_test.txt"
-    with open(path_to_test, 'w+') as fc:
-        fc.write("")
-        fc.write(str(c_to_test))
+    # path_to_test = "./ciphertext/c_to_test.txt"
+    # with open(path_to_test, 'w+') as fc:
+    #     fc.write("")
+    #     fc.write(str(c_to_test))
 
     with open(path, 'w+') as f:
         f.write("")
         f.write(str(ciphertext))
-    return [ciphertext, encodeTimeWithoutCRT]
+    return ciphertext
 
 
 if __name__ == "__main__":
