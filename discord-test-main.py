@@ -71,5 +71,5 @@ async def echo(ctx, arg):
     print("on command echo")
     await ctx.send(arg)
 
-token = "MTA4MDUzMDExODg0NzUxMjYyNw.GnQbGL.P3d-NF-QXAM5OWE0Fe754nx2LI0SkrbgdfvDZU";
+token = "MTA4MDUzMDExODg0NzUxMjYyNw.GOKK0O.mEb2h6hyP6btdCER9JdhApBpmfCff179XMgTfM";
 bot.run(token)
