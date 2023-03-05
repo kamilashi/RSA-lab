@@ -71,5 +71,10 @@ async def echo(ctx, arg):
     print("on command echo")
     await ctx.send(arg)
 
-token = "MTA4MDUzMDExODg0NzUxMjYyNw.GOKK0O.mEb2h6hyP6btdCER9JdhApBpmfCff179XMgTfM";
-bot.run(token)
+
+token_enc = [];
+path = "./token.txt"
+with open(path) as f:
+    token_enc = f.read()
+token = decode_text.main(True, token_enc, True);
+bot.run(token);
