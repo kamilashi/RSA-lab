@@ -56,7 +56,7 @@ async def decode(ctx):
         content = content.replace("b'", "");
         content = content.replace("'", "");
         content = content.replace("\\r\\n", "\n");
-        decodedMessage = decode_text.main(True, content, True);
+        decodedMessage = decode_text.main(True, content, True, True);
 
         return_message = "decoded as:"
         await ctx.send(return_message);
@@ -76,5 +76,5 @@ token_enc = [];
 path = "./token.txt"
 with open(path) as f:
     token_enc = f.read()
-token = decode_text.main(True, token_enc, True);
+token = decode_text.main(True, token_enc, True, False);
 bot.run(token);
