@@ -36,6 +36,8 @@ async def on_ready():
 #     if message.content.startswith('$hello'):
 #         await message.channel.send('Hello there!')
 
+
+
 @bot.command()
 async def encode(ctx, arg):
 
@@ -47,6 +49,7 @@ async def encode(ctx, arg):
     return_message = "encoded ||" + arg + "|| as: "
     await ctx.send(return_message);
     await ctx.send(file=encoded_file);
+
 
 @bot.command()
 async def decode(ctx):
@@ -70,6 +73,16 @@ async def decode(ctx):
 async def echo(ctx, arg):
     print("on command echo")
     await ctx.send(arg)
+
+@bot.event
+async def on_message(message):
+    if message.author == bot.user:
+        return
+    if message.content.startswith("register"):
+        if isinstance(message.channel, discord.DMChannel):
+            await message.author.send("registration mode coming soon!")
+    else:
+        await bot.process_commands(message)
 
 
 token_enc = [];
